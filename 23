@@ -1,0 +1,40 @@
+Create Table: Create a table to store flight data, including FlightID, DepartureDate, DepartureDelay, and other relevant fields.
+
+sql
+Copy
+Edit
+CREATE TABLE FlightInfo (
+    FlightID STRING,
+    DepartureDate STRING,
+    DepartureDelay INT,
+    ArrivalDelay INT,
+    FlightTime INT,
+    Origin STRING,
+    Destination STRING
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE;
+Load Data: Load flight data from a file stored on HDFS.
+
+sql
+Copy
+Edit
+LOAD DATA INPATH '/user/hive/warehouse/flight_data.csv' INTO TABLE FlightInfo;
+Create Index: Create an index on the DepartureDelay column to improve query performance.
+
+sql
+Copy
+Edit
+CREATE INDEX idx_departure_delay
+ON TABLE FlightInfo (DepartureDelay)
+AS 'org.apache.hadoop.hive.ql.index.compact.CompactIndexHandler';
+Query for Average Departure Delay: Find the average departure delay per day for the year 2008.
+
+sql
+Copy
+Edit
+SELECT DepartureDate, AVG(DepartureDelay) AS AvgDepartureDelay
+FROM FlightInfo
+WHERE YEAR(DepartureDate) = 2008
+GROUP BY DepartureDate;
