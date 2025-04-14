@@ -1,0 +1,44 @@
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Load the Iris dataset from seaborn
+iris = sns.load_dataset('iris')
+
+# Show first few rows of the dataset
+print("First few rows of the Iris Dataset:")
+print(iris.head())
+
+# -----------------------------
+# Step 1: Boxplot for each feature
+# -----------------------------
+plt.figure(figsize=(10, 6))
+sns.boxplot(x="species", y="sepal_length", data=iris)
+plt.title('Boxplot of Sepal Length by Species')
+plt.show()
+
+# ---------------------------
+# Step 2: Histogram of Sepal Length
+# ---------------------------
+plt.figure(figsize=(10, 6))
+sns.histplot(iris['sepal_length'], kde=True)
+plt.title('Histogram of Sepal Length')
+plt.xlabel('Sepal Length (cm)')
+plt.ylabel('Frequency')
+plt.show()
+
+# --------------------------
+# Step 3: Pairplot (Pairwise relationships)
+# --------------------------
+sns.pairplot(iris, hue="species")
+plt.title('Pairplot of Iris Dataset')
+plt.show()
+
+# -----------------------------
+# Step 4: Correlation Heatmap
+# -----------------------------
+plt.figure(figsize=(8, 6))
+correlation = iris.drop('species', axis=1).corr()
+sns.heatmap(correlation, annot=True, cmap='coolwarm', fmt='.2f')
+plt.title('Correlation Heatmap of Features')
+plt.show()
