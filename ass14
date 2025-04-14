@@ -1,0 +1,48 @@
+Age,Sex,ChestPainType,RestingBP,Cholesterol,FastingBS,RestingECG,MaxHR,ExerciseAngina,Oldpeak,ST_Slope
+63,Male,Typical Angina,145,233,1,Normal,150,No,2.3,Up
+37,Female,Asymptomatic,130,250,0,Normal,187,No,3.1,Flat
+41,Male,Non-Anginal Pain,120,204,,0,Normal,172,No,1.6,Up
+56,Male,Typical Angina,140,236,0,Normal,178,No,,Flat
+57,Female,Asymptomatic,120,,0,Normal,160,No,0.6,Up
+
+
+import pandas as pd
+import numpy as np
+
+# Load the Heart Disease dataset
+df = pd.read_csv("heart_disease.csv")
+print("Original Dataset:")
+print(df)
+
+# -------------------------
+# Step 1: Handle Missing Values
+# -------------------------
+# Filling missing numerical values with the mean of the column
+df['Cholesterol'].fillna(df['Cholesterol'].mean(), inplace=True)
+df['MaxHR'].fillna(df['MaxHR'].mean(), inplace=True)
+
+# For categorical data (e.g., 'RestingECG'), fill missing values with the most frequent value (mode)
+df['RestingECG'].fillna(df['RestingECG'].mode()[0], inplace=True)
+
+# If there are any missing or incorrect values in columns like 'Age' or 'RestingBP', we fill with median or mean
+df['RestingBP'].fillna(df['RestingBP'].median(), inplace=True)
+
+# -------------------------
+# Step 2: Handle Outliers
+# -------------------------
+# Assuming values outside of certain ranges are errors. For example, if `MaxHR` is above 200, correct it.
+df['MaxHR'] = np.where(df['MaxHR'] > 200, 200, df['MaxHR'])
+
+# -------------------------
+# Step 3: Remove Duplicates
+# -------------------------
+df.drop_duplicates(inplace=True)
+
+# -------------------------
+# Step 4: Verify Data After Correction
+# -------------------------
+print("\nCorrected Dataset:")
+print(df)
+
+# Save corrected dataset to a new file
+df.to_csv("heart_disease_corrected.csv", index=False)
