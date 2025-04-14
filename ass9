@@ -1,0 +1,60 @@
+Age,Gender,ChestPainType,RestingBP,Cholesterol,FastingBS,RestingECG,MaxHR,ExerciseAngina,Oldpeak,Slope,HeartDisease
+63,Male,Typical,145,233,1,Normal,150,No,2.3,Up,1
+37,Female,Asymptomatic,130,250,0,Normal,187,No,3.0,Up,1
+41,Male,NonAnginal,130,204,0,Normal,172,No,1.5,Up,1
+56,Male,Typical,120,236,0,Normal,178,No,0.8,Up,1
+57,Male,NonAnginal,120,354,0,Normal,163,No,0.6,Up,1
+
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report
+
+# Load dataset
+df = pd.read_csv("heart_disease.csv")
+print("Original Data:\n", df)
+
+# ---------------------------
+# Step 1: Data Cleaning
+# ---------------------------
+# Check for missing values
+print("\nMissing Values:\n", df.isnull().sum())
+
+# Drop rows with missing values (if any)
+df.dropna(inplace=True)
+
+# ---------------------------
+# Step 2: Transformation
+# ---------------------------
+# Convert categorical variables to numeric
+label_encoder = LabelEncoder()
+df['Gender'] = label_encoder.fit_transform(df['Gender'])
+df['ChestPainType'] = label_encoder.fit_transform(df['ChestPainType'])
+df['RestingECG'] = label_encoder.fit_transform(df['RestingECG'])
+df['ExerciseAngina'] = label_encoder.fit_transform(df['ExerciseAngina'])
+df['Slope'] = label_encoder.fit_transform(df['Slope'])
+
+# ---------------------------
+# Step 3: Model Building
+# ---------------------------
+# Define features (X) and target (y)
+X = df.drop(columns=['HeartDisease'])
+y = df['HeartDisease']
+
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Train Logistic Regression model
+model = LogisticRegression(max_iter=200)
+model.fit(X_train, y_train)
+
+# Predict
+y_pred = model.predict(X_test)
+
+# ---------------------------
+# Step 4: Evaluation
+# ---------------------------
+print("\nAccuracy:", accuracy_score(y_test, y_pred))
+print("\nClassification Report:\n", classification_report(y_test, y_pred))
