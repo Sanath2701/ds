@@ -1,0 +1,46 @@
+Date,Temperature,Humidity,PM2.5,CO2
+2024-04-01,22.0,50,35,400
+2024-04-02,21.5,55,40,410
+2024-04-03,23.0,,38,420
+2024-04-04,22.5,52,33,430
+2024-04-05,24.0,50,45,
+
+import pandas as pd
+import numpy as np
+
+# Load the Air Quality dataset
+df = pd.read_csv("air_quality.csv")
+print("Original Dataset:")
+print(df)
+
+# -------------------------
+# Step 1: Handle Missing Values
+# -------------------------
+# Filling missing numerical values with the mean of the column
+df['Humidity'].fillna(df['Humidity'].mean(), inplace=True)
+df['CO2'].fillna(df['CO2'].mean(), inplace=True)
+
+# You can also replace missing categorical data (if applicable) with mode or predefined value
+# If there's a missing value in 'PM2.5', replace with the column's median
+df['PM2.5'].fillna(df['PM2.5'].median(), inplace=True)
+
+# -------------------------
+# Step 2: Handle Outliers (Example with Temperature)
+# -------------------------
+# Assuming temperature outside the range of [18, 30] is an error
+df['Temperature'] = np.where(df['Temperature'] < 18, 18, df['Temperature'])
+df['Temperature'] = np.where(df['Temperature'] > 30, 30, df['Temperature'])
+
+# -------------------------
+# Step 3: Remove Duplicates
+# -------------------------
+df.drop_duplicates(inplace=True)
+
+# -------------------------
+# Step 4: Verify Data After Correction
+# -------------------------
+print("\nCorrected Dataset:")
+print(df)
+
+# Save corrected dataset to a new file
+df.to_csv("air_quality_corrected.csv", index=False)
