@@ -1,0 +1,44 @@
+import pandas as pd
+
+# Sample Amazon Book Reviews dataset
+data = {
+    'ReviewerID': ['R1', 'R2', 'R3', 'R4'],
+    'BookTitle': ['Book A', 'Book B', 'Book C', 'Book D'],
+    'Rating': [5, 3, 4, 2],
+    'Review': ['Excellent!', 'Okay read', 'Good book', 'Not great']
+}
+
+df = pd.DataFrame(data)
+
+print("📘 Original DataFrame:")
+print(df)
+
+# 1️⃣ Subset: Selecting specific rows
+subset = df[df['Rating'] >= 4]
+print("\n📗 Subset (Rating >= 4):")
+print(subset)
+
+# 2️⃣ Merge: Merge with another DataFrame
+book_info = pd.DataFrame({
+    'BookTitle': ['Book A', 'Book B', 'Book C', 'Book D'],
+    'Author': ['Author A', 'Author B', 'Author C', 'Author D']
+})
+
+merged = pd.merge(df, book_info, on='BookTitle')
+print("\n📘 Merged DataFrame:")
+print(merged)
+
+# 3️⃣ Sort: Sort rows by Rating
+sorted_df = df.sort_values(by='Rating', ascending=False)
+print("\n📘 Sorted by Rating (descending):")
+print(sorted_df)
+
+# 4️⃣ Transpose: Rows <-> Columns
+transposed = df.T
+print("\n📘 Transposed DataFrame:")
+print(transposed)
+
+# 5️⃣ Reshape: Using melt (row-wise reshape)
+reshaped = pd.melt(df, id_vars=['ReviewerID'], value_vars=['BookTitle', 'Rating'])
+print("\n📘 Reshaped (melted) DataFrame:")
+print(reshaped)
