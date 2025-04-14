@@ -1,0 +1,83 @@
+✅ Assignment 5: HiveQL – Employee Information System
+📌 Objective:
+Use HiveQL to perform the following operations:
+
+Create two tables
+
+Load employee data
+
+Alter table
+
+Perform JOIN to merge employee details and salary info
+
+Use External Table concept
+
+🔧 1. 🗃️ Create Tables
+sql
+Copy
+Edit
+-- Table 1: Employee Details
+CREATE TABLE employee (
+  emp_id INT,
+  name STRING,
+  designation STRING,
+  dept STRING
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ',';
+
+-- Table 2: Salary Details
+CREATE TABLE salary (
+  emp_id INT,
+  salary INT,
+  leaves_taken INT
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ',';
+🔧 2. 📤 Load Sample Data
+Sample CSV for employee (employee.csv):
+
+css
+Copy
+Edit
+101,John,Manager,HR
+102,Alice,Developer,IT
+103,Mark,Analyst,Finance
+Sample CSV for salary (salary.csv):
+
+Copy
+Edit
+101,60000,2
+102,45000,4
+103,40000,1
+sql
+Copy
+Edit
+-- Load CSV into Hive Tables
+LOAD DATA LOCAL INPATH '/home/hadoop/employee.csv' INTO TABLE employee;
+LOAD DATA LOCAL INPATH '/home/hadoop/salary.csv' INTO TABLE salary;
+🔧 3. ✏️ Alter Table Example
+sql
+Copy
+Edit
+ALTER TABLE employee ADD COLUMNS (experience INT);
+🔧 4. 🔗 Join Tables to View Full Info
+sql
+Copy
+Edit
+SELECT e.emp_id, e.name, e.designation, e.dept, s.salary, s.leaves_taken
+FROM employee e
+JOIN salary s ON e.emp_id = s.emp_id;
+🔧 5. 📂 Create External Table
+sql
+Copy
+Edit
+CREATE EXTERNAL TABLE ext_employee (
+  emp_id INT,
+  name STRING,
+  designation STRING,
+  dept STRING
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+LOCATION '/user/hive/external/employee_data/';
