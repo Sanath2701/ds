@@ -1,0 +1,39 @@
+Steps:
+Mapper (mapper.py):
+
+python
+Copy
+Edit
+#!/usr/bin/env python3
+import sys
+for line in sys.stdin:
+    words = line.strip().split()
+    for word in words:
+        print(f"{word}\t1")
+
+Reducer (reducer.py):
+
+python
+Copy
+Edit
+#!/usr/bin/env python3
+import sys
+from collections import defaultdict
+
+word_count = defaultdict(int)
+for line in sys.stdin:
+    word, count = line.strip().split('\t')
+    word_count[word] += int(count)
+
+for word, count in word_count.items():
+    print(f"{word}\t{count}")
+Run in Hadoop: Use the following commands to run the MapReduce job:
+
+bash
+Copy
+Edit
+hadoop jar /usr/lib/hadoop-mapreduce/hadoop-streaming.jar \
+  -input /input/path/textfile.txt \
+  -output /output/path/result \
+  -mapper mapper.py \
+  -reducer reducer.py
