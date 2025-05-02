@@ -1,0 +1,43 @@
+CREATE DATABASE IF NOT EXISTS employeedb
+USE employeedb
+
+CREATE TABLE employee (
+  emp_id INT,
+  name STRING,
+  designation STRING,
+  dept STRING
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+
+CREATE TABLE payroll (
+  emp_id INT,
+  salary INT,
+  leaves_taken INT
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+
+ALTER TABLE employee ADD COLUMNS (experience INT)
+
+LOAD DATA LOCAL INPATH '/home/hadoop/employee.csv' INTO TABLE employee
+
+LOAD DATA LOCAL INPATH '/home/hadoop/payroll.csv' INTO TABLE payroll
+
+SELECT e.emp_id, e.name, e.designation, e.dept, p.salary, p.leaves_taken
+FROM employee e
+JOIN payroll p
+ON e.emp_id = p.emp_id
+
+CREATE EXTERNAL TABLE external_employee (
+  emp_id INT,
+  name STRING,
+  designation STRING,
+  dept STRING
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+LOCATION '/user/hive/external/employee'
