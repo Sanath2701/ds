@@ -1,0 +1,25 @@
+import requests
+import bs4
+
+request = requests.get("<< Link to be pasted >>")
+# Output: <Response 200>
+
+request1_content = request.content
+
+soup = bs4.BeautifulSoup(request1_content, 'html.parser')
+
+reviews = soup.find_all('div', {'class': 'pasteClass1'})
+for review in reviews:
+    print(review.get_text() + '\n')
+
+# Extract rating (commented out in image)
+# rating = soup.find_all('div', {'class': 'pasteClass2'})
+
+tags = soup.find('span', {'class': 'to be pasted 3'})
+
+custom_name = soup.findAll('p', {'class': 'to be pasted 3'})
+for cust_name in custom_name:
+    print(cust_name.get_text() + '\n')
+
+price = soup.find('div', {'class': 'to be past 3'}).get_text()
+print(price)
