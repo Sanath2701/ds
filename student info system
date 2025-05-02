@@ -1,0 +1,49 @@
+ Create Database
+
+CREATE DATABASE IF NOT EXISTS studentdb;
+USE studentdb;
+2. Create Tables
+Table 1: Student
+
+CREATE TABLE student (
+  stu_id INT,
+  name STRING,
+  branch STRING
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+STORED AS TEXTFILE;
+Table 2: Marks
+
+CREATE TABLE marks (
+  stu_id INT,
+  subject STRING,
+  marks INT
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+STORED AS TEXTFILE;
+3. Insert Sample Data
+Insert into student:
+
+INSERT INTO student VALUES
+(1, 'Rahul', 'CSE'),
+(2, 'Anita', 'ECE'),
+(3, 'Vikram', 'IT'),
+(4, 'Sneha', 'CSE');
+Insert into marks:
+
+INSERT INTO marks VALUES
+(1, 'Maths', 85),
+(2, 'Physics', 78),
+(3, 'Chemistry', 92),
+(1, 'CS', 88),
+(4, 'Maths', 75);
+4. Join Tables and Find Students with Marks > 80
+
+SELECT s.stu_id, s.name, s.branch, m.subject, m.marks
+FROM student s
+JOIN marks m ON (s.stu_id = m.stu_id)
+WHERE m.marks > 80;
