@@ -1,0 +1,45 @@
+1. Creating a Table
+
+-- Create a database (optional)
+CREATE DATABASE IF NOT EXISTS studentdb;
+USE studentdb;
+
+-- Create a managed table
+CREATE TABLE IF NOT EXISTS students (
+  stu_id INT,
+  name STRING,
+  branch STRING
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE;
+2. Altering a Table
+
+-- Add a new column
+ALTER TABLE students ADD COLUMNS (year INT);
+
+-- Change the column name
+ALTER TABLE students CHANGE name student_name STRING;
+3. Dropping a Table
+
+-- Drop the table if it exists
+DROP TABLE IF EXISTS students;
+4. Loading Data into Table
+
+-- Assuming you have a CSV file like: /home/hadoop/students.csv
+-- Format of data: 1,Rahul,CSE,2
+
+LOAD DATA LOCAL INPATH '/home/hadoop/students.csv'
+INTO TABLE students;
+5. Creating an External Table
+
+-- External table stores data outside Hive warehouse
+CREATE EXTERNAL TABLE IF NOT EXISTS external_students (
+  stu_id INT,
+  name STRING,
+  branch STRING
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+LOCATION '/user/hive/external_data/students';
