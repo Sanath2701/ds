@@ -1,0 +1,107 @@
+1. Create a Hive Database
+sql
+Copy
+Edit
+CREATE DATABASE mydb2;
+USE mydb2;
+Creates and switches to a new Hive database.
+
+2. Create Table flight
+
+CREATE TABLE flight (
+  fno INT,
+  year INT,
+  dest VARCHAR(10),
+  delay FLOAT
+);
+Creates a basic flight table with flight number, year, destination, and delay.
+
+3. Alter Table
+Rename table:
+
+
+ALTER TABLE flight RENAME TO air_flight;
+Add column:
+
+
+ALTER TABLE air_flight ADD COLUMNS (source VARCHAR(10));
+Modifies the existing table to rename it and add a new column.
+
+4. Drop Table
+
+DROP TABLE flight;
+Deletes the table flight.
+
+5. Describe Table
+
+DESC air_flight;
+Shows structure of the table.
+
+6. Create table with file format
+
+CREATE TABLE flight (
+  fno INT,
+  year INT,
+  dest VARCHAR(10),
+  delay FLOAT
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+STORED AS TEXTFILE;
+Creates a table with file format definitions for loading from a CSV-like file.
+
+7. Insert Data
+
+INSERT INTO flight VALUES (123, 2001, 'mumbai', 30.6);
+INSERT INTO flight VALUES (124, 2001, 'pune', 18.5);
+Inserts values into the flight table.
+
+8. View Table Contents
+
+SELECT * FROM flight;
+Displays data from the table.
+
+9. Load Data from File
+
+LOAD DATA LOCAL INPATH 'f.txt' OVERWRITE INTO TABLE flight;
+Loads data from a local file into the flight table.
+
+10. Join Tables
+
+CREATE TABLE nflight (
+  fno INT,
+  year INT,
+  source VARCHAR(10)
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+STORED AS TEXTFILE;
+
+INSERT INTO nflight VALUES (123, 2001, 'pune');
+
+SELECT a.fno, a.year, a.dest, a.delay, b.source
+FROM flight a JOIN nflight b
+ON (a.fno = b.fno);
+Performs a join between flight and nflight on flight number.
+
+11. Check Unique Record Using Index
+
+CREATE INDEX flight_index ON TABLE flight(fno)
+AS 'org.apache.hadoop.hive.ql.index.compact.CompactIndexHandler'
+WITH DEFERRED REBUILD;
+Creates an index on the fno column of the flight table.
+
+12. Average Departure Delay Per Day (Assuming you add a day column)
+First, alter the table to add a day column if not already present:
+
+
+ALTER TABLE flight ADD COLUMNS (day STRING);
+Then, query for average delay:
+
+
+SELECT day, AVG(delay) AS avg_delay
+FROM flight
+GROUP BY day;
+Let me know if your data has a date column instead of day, or if you want it grouped by full date.
