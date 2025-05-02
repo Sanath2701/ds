@@ -1,19 +1,25 @@
-pip install requests beautifulsoup4
 import requests
-from bs4 import BeautifulSoup
+import bs4
 
-# URL of the ecommerce product page
-url = 'https://example.com/product-reviews'
+request = requests.get("<< Link to be pasted >>")
+# Output: <Response 200>
 
-# Send HTTP request to fetch the page content
-response = requests.get(url)
-soup = BeautifulSoup(response.content, 'html.parser')
+request1_content = request.content
 
-# Extract reviews, comments, and customer names
-reviews = soup.find_all('div', class_='review')
+soup = bs4.BeautifulSoup(request1_content, 'html.parser')
 
+reviews = soup.find_all('div', {'class': 'pasteClass1'})
 for review in reviews:
-    customer_name = review.find('span', class_='customer-name').text
-    comment = review.find('p', class_='review-comment').text
-    rating = review.find('span', class_='rating').text
-    print(f"Customer: {customer_name}, Rating: {rating}, Comment: {comment}")
+    print(review.get_text() + '\n')
+
+# Extract rating (commented out in image)
+# rating = soup.find_all('div', {'class': 'pasteClass2'})
+
+tags = soup.find('span', {'class': 'to be pasted 3'})
+
+custom_name = soup.findAll('p', {'class': 'to be pasted 3'})
+for cust_name in custom_name:
+    print(cust_name.get_text() + '\n')
+
+price = soup.find('div', {'class': 'to be past 3'}).get_text()
+print(price)
