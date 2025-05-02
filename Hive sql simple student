@@ -1,0 +1,31 @@
+CREATE TABLE students (
+  stu_id INT,
+  name STRING,
+  branch STRING
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+
+CREATE TABLE marks (
+  stu_id INT,
+  subject STRING,
+  marks INT
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+
+LOAD DATA LOCAL INPATH '/home/hadoop/students.csv' INTO TABLE students
+
+LOAD DATA LOCAL INPATH '/home/hadoop/marks.csv' INTO TABLE marks
+
+INSERT INTO TABLE students VALUES (4, 'Anjali', 'ECE')
+
+INSERT INTO TABLE marks VALUES (4, 'AI', 90)
+
+SELECT s.stu_id, s.name, s.branch, m.subject, m.marks
+FROM students s
+JOIN marks m
+ON s.stu_id = m.stu_id
+WHERE m.marks > 80
