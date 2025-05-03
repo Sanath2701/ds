@@ -1,0 +1,75 @@
+Starting HBase Services
+
+sudo service zookeeper-server start   ( IMPORTANT CODES RATNe padenge ye 5) habse shell tak
+sudo service hadoop-hdfs-namenode start
+sudo service hadoop-hdfs-datanode start
+sudo service hbase-master start
+sudo service hbase-regionserver start
+hbase shell
+Description: Starts essential Hadoop and HBase services and opens the HBase shell.
+
+Creating Table
+
+create 'flight', 'finfo', 'fsch'
+Description: Creates an HBase table named flight with column families finfo and fsch.
+
+Inserting Records
+
+put 'flight', '1', 'finfo:source', 'pune'
+put 'flight', '1', 'finfo:dest', 'mumbai'
+put 'flight', '1', 'fsch:at', '10.20am'
+put 'flight', '2', 'fsch:at', '11.45am'
+put 'flight', '1', 'fsch:delay', '5'
+Description: Inserts data into the flight table under different rows and columns.
+
+Display Records
+
+scan 'flight'
+Description: Displays all records from the flight table.
+
+Alter Table to Add Column
+
+alter 'flight', NAME => 'revenue'
+Description: Adds a new column family revenue to the flight table.
+
+Insert Record to Altered Table
+
+put 'flight', '4', 'revenue:rs', '450000'
+Description: Inserts revenue data into the newly added column family revenue.
+
+Delete Column Family
+
+alter 'flight', NAME => 'revenue', METHOD => 'delete'
+Description: Deletes the column family revenue from the flight table.
+
+Drop Table
+
+create 'tbl1', 'cf'
+drop 'tbl1'
+Description: Creates and then deletes a table named tbl1.
+
+Disable and Drop Table
+
+disable 'tbl1'
+drop 'tbl1'
+Description: Disables and drops the table tbl1 (required step before dropping any table).
+
+Read Data by Row Key
+
+get 'flight', '1'
+Description: Fetches all columns for row key 1 in the flight table.
+
+Read From Specific Column
+
+get 'flight', '1', COLUMN => 'finfo:source'
+Description: Retrieves the value of finfo:source for row key 1.
+
+Read From Multiple Columns
+
+get 'flight', '1', COLUMN => ['finfo:source', 'finfo:dest']
+Description: Retrieves values of multiple columns for row key 1.
+
+Scan Specific Column
+
+scan 'flight', COLUMNS => 'finfo:source'
+Description: Scans and displays only the finfo:source column from the flight table.
