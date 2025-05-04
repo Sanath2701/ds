@@ -1,0 +1,67 @@
+# Import libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Load data
+heart = pd.read_csv('Hear.csv')
+
+# Initial data inspection
+print(heart.shape)
+print(heart.head())
+print(heart.columns)
+print(heart.isnull().sum())
+print(heart.describe())
+print(heart.info())
+
+# Drop rows with missing values
+A = heart.dropna()
+print(A.shape)
+
+# Fill missing values with 0
+A = heart.fillna(0)
+
+# Forward fill
+A = heart.fillna(method='pad')
+
+# Backward fill
+A = heart.fillna(method='backfill')
+
+# Use SimpleImputer with mean strategy
+from sklearn.impute import SimpleImputer
+imp = SimpleImputer(missing_values=np.nan, strategy='mean')
+A = pd.DataFrame(imp.fit_transform(heart), columns=heart.columns)
+
+# Feature scaling
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler()
+B = scaler.fit_transform(A)
+
+# Optional: Label Encoding (for target/class column if categorical)
+from sklearn.preprocessing import LabelEncoder
+le = LabelEncoder()
+data = pd.DataFrame(B, columns=heart.columns)
+if 'target' in data.columns:
+    data['target'] = le.fit_transform(data['target'])
+
+# Train-test split
+from sklearn.model_selection import train_test_split
+train, test = train_test_split(data, test_size=0.2)
+
+# Model building (predict 'target' from 'chol')
+from sklearn.linear_model import LinearRegression
+X = data[['chol']].values.reshape(-1, 1)
+Y = data['target']
+
+model = LinearRegression()
+model.fit(X, Y)
+
+print("Accuracy:", model.score(X, Y) * 100)
+print("Prediction for chol=250:", model.predict([[250]]))
+
+# Scatter plot
+plt.scatter(X, Y)
+plt.xlabel('Cholesterol')
+plt.ylabel('Target')
+plt.title('Cholesterol vs Target')
+plt.show()
