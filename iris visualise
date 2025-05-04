@@ -1,0 +1,36 @@
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Load Iris dataset
+from sklearn.datasets import load_iris
+iris = load_iris()
+df = pd.DataFrame(iris.data, columns=iris.feature_names)
+df['species'] = iris.target
+
+# Boxplot
+plt.figure(figsize=(8,5))
+sns.boxplot(data=df.iloc[:, :4])
+plt.title('Boxplot - Iris Features')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+# Histogram
+df.iloc[:, :4].hist(figsize=(10,8), bins=15)
+plt.suptitle('Histogram - Iris Features')
+plt.tight_layout()
+plt.show()
+
+# Single Line Plot (e.g., Petal Length)
+df['petal length (cm)'].plot(kind='line', title='Petal Length over Samples', figsize=(8,4))
+plt.ylabel('Length (cm)')
+plt.grid(True)
+plt.show()
+
+# Multiple Line Plot
+df[['sepal length (cm)', 'sepal width (cm)', 'petal length (cm)', 'petal width (cm)']].plot(
+    kind='line', figsize=(10,5), title='Multiple Line Plot - Iris Features')
+plt.ylabel('Value (cm)')
+plt.grid(True)
+plt.show()
