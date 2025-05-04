@@ -1,0 +1,26 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+air = pd.read_csv('airquality.csv')
+
+# Boxplot
+plt.figure(figsize=(8,5))
+sns.boxplot(data=air)
+plt.title('Boxplot - Air Quality')
+plt.show()
+
+# Histogram
+air.hist(figsize=(10,8), bins=20)
+plt.suptitle('Histogram - Air Quality')
+plt.show()
+
+# Line Plot (Single Column)
+air['Temp'].plot(kind='line', title='Temperature Trend', figsize=(8,4))
+plt.ylabel('Temperature')
+plt.show()
+
+# Line Plot (Multiple Columns)
+air[['Ozone', 'Solar.R', 'Wind']].plot(kind='line', title='Multiple Line Plot', figsize=(10,5))
+plt.ylabel('Values')
+plt.show()
