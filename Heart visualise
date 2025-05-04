@@ -1,0 +1,26 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+heart = pd.read_csv('heart.csv')
+
+# Boxplot
+plt.figure(figsize=(8,5))
+sns.boxplot(data=heart)
+plt.title('Boxplot - Heart Disease')
+plt.show()
+
+# Histogram
+heart.hist(figsize=(10,8), bins=20)
+plt.suptitle('Histogram - Heart Disease')
+plt.show()
+
+# Line Plot (Single Column)
+heart['chol'].plot(kind='line', title='Cholesterol Trend', figsize=(8,4))
+plt.ylabel('Cholesterol')
+plt.show()
+
+# Line Plot (Multiple Columns)
+heart[['chol', 'trestbps', 'thalach']].plot(kind='line', title='Multiple Line Plot', figsize=(10,5))
+plt.ylabel('Values')
+plt.show()
