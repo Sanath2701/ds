@@ -1,0 +1,50 @@
+import pandas as pd
+
+# Load the dataset
+df = pd.read_csv(r"C:\Users\Sanath\Downloads\facebook_metrics.csv")
+
+# Clean column names
+df.columns = df.columns.str.strip()
+
+# Show column names
+print("Columns in dataset:", df.columns.tolist())
+
+# 1. Create Subset 1 (First 100 rows)
+subset1 = df.iloc[:100]
+print("\n--- Subset 1: First 100 rows ---")
+print(subset1.head())
+
+# 2. Create Subset 2 (Total Interactions >= 1000)
+subset2 = df[df['Total Interactions'] >= 1000]
+print("\n--- Subset 2: Posts with Total Interactions >= 1000 ---")
+print(subset2.head())
+
+# 3. Create Subset 3 (Post Month == 1 and Type == 'Photo')
+subset3 = df.loc[(df['Post Month'] == 1) & (df['Type'] == 'Photo'), ['Type', 'Post Month', 'Total Interactions']]
+print("\n--- Subset 3: Photo posts in January ---")
+print(subset3.head())
+
+# 4. Merge Subset1 and Subset2
+merged_df = pd.concat([subset1, subset2], axis=0)
+print("\n--- Merged DataFrame (subset1 + subset2) ---")
+print(merged_df.head())
+
+# 5. Sort by Total Interactions (descending)
+sorted_df = df.sort_values(by='Total Interactions', ascending=False)
+print("\n--- Sorted by Total Interactions (descending) ---")
+print(sorted_df[['Type', 'Total Interactions']].head())
+
+# 6. Sort by Type and Post Month
+sorted_multi = df.sort_values(by=['Type', 'Post Month'], ascending=[True, True])
+print("\n--- Sorted by Type and Post Month ---")
+print(sorted_multi[['Type', 'Post Month', 'Total Interactions']].head())
+
+# 7. Transpose the first 5 rows
+transposed = df.head().transpose()
+print("\n--- Transposed (first 5 rows turned into columns) ---")
+print(transposed)
+
+# 8. Reshape using pivot_table (average Total Interactions per Post Month)
+reshaped = df.pivot_table(index='Post Month', values='Total Interactions', aggfunc='mean')
+print("\n--- Reshaped (average Total Interactions per Post Month) ---")
+print(reshaped.head())
