@@ -1,0 +1,34 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load the dataset
+df = pd.read_csv('dataset_Facebook.csv', sep=';')  # Adjust delimiter if needed
+
+# Boxplot
+plt.figure(figsize=(10,6))
+sns.boxplot(data=df.select_dtypes(include='number'))
+plt.title('Boxplot - Facebook Metrics')
+plt.xticks(rotation=90)
+plt.tight_layout()
+plt.show()
+
+# Histogram
+df.select_dtypes(include='number').hist(figsize=(12,10), bins=20)
+plt.suptitle('Histogram - Facebook Metrics')
+plt.tight_layout()
+plt.show()
+
+# Single Line Plot
+df['Total Interactions'].plot(kind='line', title='Total Interactions Over Posts', figsize=(10,5))
+plt.ylabel('Interactions')
+plt.xlabel('Post Index')
+plt.grid(True)
+plt.show()
+
+# Multiple Line Plot
+df[['like', 'share', 'comment']].plot(kind='line', figsize=(10,6), title='Engagement Metrics Over Time')
+plt.ylabel('Count')
+plt.xlabel('Post Index')
+plt.grid(True)
+plt.show()
