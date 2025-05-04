@@ -1,0 +1,60 @@
+# Import libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Load data
+air = pd.read_csv('airquality.csv')
+
+# Initial data inspection
+print(air.shape)
+print(air.head())
+print(air.columns)
+print(air.isnull().sum())
+print(air.describe())
+print(air.info())
+
+# Drop rows with missing values
+A = air.dropna()
+print(A.shape)
+
+# Fill missing values with 0
+A = air.fillna(0)
+
+# Forward fill missing values
+A = air.fillna(method='pad')
+
+# Backward fill missing values
+A = air.fillna(method='backfill')
+
+# Fill missing values using mean strategy
+from sklearn.impute import SimpleImputer
+imp = SimpleImputer(missing_values=np.nan, strategy='mean')
+A = pd.DataFrame(imp.fit_transform(air), columns=air.columns)
+
+# Standardize data
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler()
+B = scaler.fit_transform(A)
+
+# Split dataset
+from sklearn.model_selection import train_test_split
+train, test = train_test_split(A, test_size=0.2)
+
+# Model building (predict 'Temp' from 'Ozone')
+from sklearn.linear_model import LinearRegression
+X = A[['Ozone']].values.reshape(-1, 1)
+Y = A['Temp']
+
+model = LinearRegression()
+model.fit(X, Y)
+
+print("Accuracy:", model.score(X, Y) * 100)
+print("Prediction for Ozone=120:", model.predict([[120]]))
+
+# Scatter plot
+plt.scatter(X, Y)
+plt.xlabel('Ozone')
+plt.ylabel('Temperature')
+plt.title('Ozone vs Temperature')
+plt.show()
