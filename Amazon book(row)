@@ -1,0 +1,50 @@
+import pandas as pd
+
+# Load the dataset
+df = pd.read_csv(r"C:\Users\Sanath\Downloads\customer reviews.csv")
+
+# Clean column names
+df.columns = df.columns.str.strip()
+
+# Show column names
+print("Columns in dataset:", df.columns.tolist())
+
+# 1. Create Subset 1 (First 100 rows)
+subset1 = df.iloc[:100]
+print("\n--- Subset 1: First 100 rows ---")
+print(subset1.head())
+
+# 2. Create Subset 2 (Ratings >= 4)
+subset2 = df[df['reviewer rating'] >= 4]
+print("\n--- Subset 2: Reviews with rating >= 4 ---")
+print(subset2.head())
+
+# 3. Create Subset 3 (Ratings < 3, only reviewer and review description)
+subset3 = df.loc[df['reviewer rating'] < 3, ['reviewer', 'review description']]
+print("\n--- Subset 3: Low rated reviews with reviewer and description ---")
+print(subset3.head())
+
+# 4. Merge Subset1 and Subset2
+merged_df = pd.concat([subset1, subset2], axis=0)
+print("\n--- Merged DataFrame (subset1 + subset2) ---")
+print(merged_df.head())
+
+# 5. Sort by reviewer rating (descending)
+sorted_df = df.sort_values(by='reviewer rating', ascending=False)
+print("\n--- Sorted by reviewer rating (descending) ---")
+print(sorted_df.head())
+
+# 6. Sort by reviewer rating and is_verified
+sorted_multi = df.sort_values(by=['reviewer rating', 'is_verified'], ascending=[False, True])
+print("\n--- Sorted by reviewer rating and is_verified ---")
+print(sorted_multi.head())
+
+# 7. Transpose the first few rows
+transposed = df.head().transpose()
+print("\n--- Transposed (first 5 rows turned into columns) ---")
+print(transposed)
+
+# 8. Reshape using pivot_table (average rating per book)
+reshaped = df.pivot_table(index='book name', values='reviewer rating', aggfunc='mean')
+print("\n--- Reshaped (average rating per book name) ---")
+print(reshaped.head())
